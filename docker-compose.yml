@@ -1,0 +1,61 @@
+services:
+  booking-service:
+    image: lion3993vn/booking-service:latest
+    container_name: booking-service
+    restart: always
+    environment:
+    - SPRING_PROFILES_ACTIVE=prod
+    build:
+      context: ./booking-service
+      dockerfile: Dockerfile
+    ports:
+      - "9083:8083"
+    networks:
+      - 4bus-network
+  bus-service:
+    image: lion3993vn/bus-service:latest
+    container_name: bus-service
+    restart: always
+    environment:
+    - SPRING_PROFILES_ACTIVE=prod
+    build:
+      context: ./bus-service
+      dockerfile: Dockerfile
+    ports:
+      - "9081:8081"
+    networks:
+      - 4bus-network
+  trip-service:
+    image: lion3993vn/trip-service:latest
+    container_name: trip-service
+    restart: always
+    environment:
+    - SPRING_PROFILES_ACTIVE=prod
+    build:
+      context: ./trip-service
+      dockerfile: Dockerfile
+    ports:
+      - "9082:8082"
+    networks:
+      - 4bus-network
+  user-service:
+    image: lion3993vn/user-service:latest
+    container_name: user-service
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "9080:8080"
+    networks:
+      - 4bus-network
+
+networks:
+  4bus-network:
+    driver: bridge
